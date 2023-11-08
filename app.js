@@ -14,28 +14,32 @@ const io = new Server(server);
 
 const allMessages = [];
 
-app.use(express.static(__dirname + '/src/utils/style.css'));
+app.use(express.static(__dirname));
+
 
 app.get('/', (_req, res) => {
     res.sendFile(__dirname + '/src/utils/index.html');
   });
 
-io.on("connection", (socket) => {
+  io.on('connection', (socket) => {
+    console.log('Usuario conectado');
   
-console.log("User connected");
-
-  socket.on("chat-msg", (msgData) => {
-    console.log(msgData);
-
-    allMessages.push(msgData);
-
-    io.emit("chat-msg", msgData);
+    // Envia todos los mensajes anteriores al nuevo usuario
+    socket.emit('chat-history', allMessages);
+  
+    socket.on('chat-msg', (msgData) => {
+      console.log(msgData);
+  
+      allMessages.push(msgData);
+  
+      // Emite el nuevo mensaje a todos los clientes conectados
+      io.emit('chat-msg', msgData);
+    });
+  
+    socket.on('disconnect', () => {
+      console.log('Usuario desconectado');
+    });
   });
-
-  socket.on("disconnect", () => {
-    console.log("User disconnected");
-  });
-});
 
 
 

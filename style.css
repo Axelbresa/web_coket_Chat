@@ -1,0 +1,100 @@
+body {
+    color: rgb(70, 71, 72);
+}
+
+.gato {
+    margin: 100px 390px;
+}
+
+form {
+    margin: 10px;
+}
+
+
+.add_mensajes {
+    border: 2px solid black;
+    height: auto;
+    padding: 2px;
+    text-align: center;
+    background-color: rgb(255, 255, 255);
+    margin: 100px 400px;
+}
+
+.enviar {
+    padding: 8px;
+    background-color: blue;
+    border-radius: 15px;
+    color: aliceblue;
+}
+
+.enviar:hover {
+    background-color: rgb(72, 128, 29);
+    color: rgb(255, 255, 255);
+}
+
+/* Estilo de los mensajes en la lista */
+.list-group-item {
+    background-color: rgb(41, 255, 8);
+    border: 1px solid #ddd;
+    /* margin-bottom: 10px; */
+    margin: 5px 400px;
+
+}
+
+/* Estilo de los nombres de usuario */
+.list-group-item .badge {
+    background-color: #007bff;
+    color: #fff;
+    font-weight: bold;
+    padding: 5px;
+    border-radius: 5px;
+    border-radius: 10px;
+}
+
+/* Estilo de la sección de bienvenida */
+#userSection {
+    background-color: #f7f7f7;
+    padding: 10px;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+    margin: 100px 390px;
+
+}
+
+/* Estilo del formulario de entrada de mensajes */
+#formUserMessage {
+    border: 1px solid #ccc;
+}
+
+/* Estilo del formulario de ingreso de nombre de usuario */
+#formUserName {
+    background-color: #f7f7f7;
+    padding: 10px;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+}
+
+/* Estilo del campo de entrada de nombre de usuario */
+#username {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+/* Estilo del botón de ingreso */
+#formUserName button {
+    background-color: #007bff;
+    color: #fff;
+    font-weight: bold;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Estilo cuando se pasa el ratón por encima del botón */
+#formUserName button:hover {
+    background-color: #0056b3;
+}

@@ -6,41 +6,42 @@
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link rel="stylesheet" href="./style.css">
-  <!-- Bootstrap CSS v5.2.1 -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+  <!-- Bootstrap CSS v5.2.1 --> 
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
-</head>
+  <link rel="stylesheet" href="/style.css">
+
+  </head>
 
 <body>
   <main class="vh-100 mx-auto container">
 
     <div id="containerUserMessage" class="container visually-hidden h-100 d-flex flex-column justify-content-end">
-      <div id="userSection" style="display: none;">
+      <div class="mensajes" id="userSection" style="display: none;">
         <h4>Bienvenido  <span id="displayedUsername"></span></h4>
       </div>
-      <ul class="list-group">
+      <ul class="list-group"> 
         <!-- <li class="list-group-item d-flex justify-content-between align-items-center">
             List item
             <span class="badge bg-secondary badge-pill">Username</span>
           </li>        -->
       </ul>
-      <form id="formUserMessage">
+      <form class="add_mensajes" id="formUserMessage">
         <div class="mb-3">
           <label for="message" class="form-label">Mensaje</label>
           <input type="text" class="form-control" name="message" id="message" aria-describedby="helpId" placeholder="">
           <small id="helpId" class="form-text text-muted">Ingrese el mensaje</small>
         </div>
-        <button type="submit" class="btn btn-primary">enviar</button>
+        <button class="enviar" type="submit" class="btn btn-primary">enviar</button>
       </form>
     </div>
 
-    <form style="display: none;" class="d-flex flex-column h-100  align-items-center justify-content-center"
+    <form style="display: none;" class="gato d-flex flex-column h-20  align-items-center justify-content-center"
       id="formUserName">
       <div class="mb-3 row">
-        <label for="username" class="col-4 col-form-label">Nombre de usuario</label>
+        <label for="username" class="col-6 col-form-label">Nombre de usuario</label>
         <div class="col-8">
-          <input type="text" class="form-control" name="username" id="username" placeholder="Usuario">
+          <input type="text" class="form-control" name="username" id="username" placeholder="ingrese su nombre deUsuario">
         </div>
       </div>
       <button type="submit" class="btn btn-primary">Ingresar</button>
@@ -107,10 +108,27 @@
 
     // Agregar el elemento de lista al contenedor de mensajes
     messageList.appendChild(listItem);
-
-    
   });
 
+  socket.on('chat-history', (messages) => {
+  // Agregar los mensajes al historial local
+  for (const message of messages) {
+    allMessages.push(message);
+  }
+
+  // Actualiza la lista de mensajes
+  const messageList = document.getElementById('messages');
+  while (messageList.firstChild) {
+    messageList.removeChild(messageList.firstChild);
+  }
+
+  for (const message of allMessages) {
+    const messageElement = document.createElement('li');
+    messageElement.textContent = `${message.username}: ${message.message}`;
+
+    messageList.appendChild(messageElement);
+  }
+});
 
 
 
