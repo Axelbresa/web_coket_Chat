@@ -64,6 +64,9 @@ const usernameInput = document.querySelector('#username');
 const messageInput = document.querySelector('#message');
 const messageList = document.querySelector('.list-group');
 
+// Objeto para almacenar colores de usuarios
+const userColors = {};
+
 formUserName.addEventListener('submit', function (e) {
   e.preventDefault();
   if (usernameInput.value) {
@@ -73,6 +76,11 @@ formUserName.addEventListener('submit', function (e) {
     userSection.style.display = 'block';
     const displayedUsername = document.getElementById('displayedUsername');
     displayedUsername.textContent = usernameInput.value;
+
+    // Generar un color aleatorio para el usuario si aún no tiene uno
+    if (!userColors[usernameInput.value]) {
+      userColors[usernameInput.value] = getRandomColor();
+    }
   }
 });
 
@@ -94,11 +102,14 @@ socket.on('chat-msg', (msgData) => {
   messageText.textContent = msgData.message;
 
   const badge = document.createElement('span');
-  badge.classList.add('badge', 'bg-secondary', 'badge-pill');
+  badge.classList.add('badge', 'badge-pill', `user-${msgData.username}`);
   badge.textContent = msgData.username;
 
   listItem.appendChild(messageText);
   listItem.appendChild(badge);
+
+  // Asignar el color del usuario al mensaje
+  listItem.style.backgroundColor = userColors[msgData.username];
 
   messageList.appendChild(listItem);
 });
@@ -114,15 +125,28 @@ socket.on('chat-history', (messages) => {
     messageText.textContent = message.message;
 
     const badge = document.createElement('span');
-    badge.classList.add('badge', 'bg-secondary', 'badge-pill');
+    badge.classList.add('badge', 'badge-pill', `user-${message.username}`);
     badge.textContent = message.username;
 
     listItem.appendChild(messageText);
     listItem.appendChild(badge);
 
+    // Asignar el color del usuario al mensaje
+    listItem.style.backgroundColor = userColors[message.username];
+
     messageList.appendChild(listItem);
   }
 });
+
+function getRandomColor() {
+  const letters = '0123456789ABCDEF';
+  let color = '#';
+  for (let i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
+
 
   </script>
 </body>
