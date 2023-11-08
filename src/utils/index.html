@@ -55,82 +55,74 @@
 
   <script src="/socket.io/socket.io.js"></script>
   <script>
-    var socket = io();
+   var socket = io();
 
-    const formUserName = document.querySelector('#formUserName');
-    const containerUserMessage = document.querySelector('#containerUserMessage');
-    const formUserMessage = document.querySelector('#formUserMessage');
-    const usernameInput = document.querySelector('#username');
-    const messageInput = document.querySelector('#message');
+const formUserName = document.querySelector('#formUserName');
+const containerUserMessage = document.querySelector('#containerUserMessage');
+const formUserMessage = document.querySelector('#formUserMessage');
+const usernameInput = document.querySelector('#username');
+const messageInput = document.querySelector('#message');
+const messageList = document.querySelector('.list-group');
 
-    formUserName.addEventListener('submit', function (e) {
-      e.preventDefault();
-      if (usernameInput.value) {
-        formUserName.classList.remove('d-flex')
-        containerUserMessage.classList.remove('visually-hidden')
-         // Muestra la sección de bienvenida con el nombre de usuario
-      const userSection = document.getElementById('userSection');
-      userSection.style.display = 'block';
-       // Establece el nombre de usuario en la página
+formUserName.addEventListener('submit', function (e) {
+  e.preventDefault();
+  if (usernameInput.value) {
+    formUserName.classList.remove('d-flex');
+    containerUserMessage.classList.remove('visually-hidden');
+    const userSection = document.getElementById('userSection');
+    userSection.style.display = 'block';
     const displayedUsername = document.getElementById('displayedUsername');
     displayedUsername.textContent = usernameInput.value;
-      }
-    })
-
-    formUserMessage.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const message = {
-        username : usernameInput.value,
-        message : messageInput.value
-      }
-       // Emitir el mensaje al servidor
-  socket.emit('chat-msg', message);
-
-  // Limpia el campo de entrada del mensaje
-  messageInput.value = '';  
-    })
-
-     // Manejar mensajes entrantes del servidor
-  socket.on('chat-msg', (msgData) => {
-    // Crear un nuevo elemento de lista para mostrar el mensaje
-    const listItem = document.createElement('li');
-    listItem.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center');
-    listItem.textContent = msgData.message;
-
-    const badge = document.createElement('span');
-    badge.classList.add('badge', 'bg-secondary', 'badge-pill');
-    badge.textContent = msgData.username;
-
-    listItem.appendChild(badge);
-
-    // Obtener el contenedor de la lista de mensajes
-    const messageList = document.querySelector('.list-group');
-
-    // Agregar el elemento de lista al contenedor de mensajes
-    messageList.appendChild(listItem);
-  });
-
-  socket.on('chat-history', (messages) => {
-  // Agregar los mensajes al historial local
-  for (const message of messages) {
-    allMessages.push(message);
-  }
-
-  // Actualiza la lista de mensajes
-  const messageList = document.getElementById('messages');
-  while (messageList.firstChild) {
-    messageList.removeChild(messageList.firstChild);
-  }
-
-  for (const message of allMessages) {
-    const messageElement = document.createElement('li');
-    messageElement.textContent = `${message.username}: ${message.message}`;
-
-    messageList.appendChild(messageElement);
   }
 });
 
+formUserMessage.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const message = {
+    username: usernameInput.value,
+    message: messageInput.value
+  }
+  socket.emit('chat-msg', message);
+  messageInput.value = '';
+});
 
+socket.on('chat-msg', (msgData) => {
+  const listItem = document.createElement('li');
+  listItem.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center');
+
+  const messageText = document.createElement('span');
+  messageText.textContent = msgData.message;
+
+  const badge = document.createElement('span');
+  badge.classList.add('badge', 'bg-secondary', 'badge-pill');
+  badge.textContent = msgData.username;
+
+  listItem.appendChild(messageText);
+  listItem.appendChild(badge);
+
+  messageList.appendChild(listItem);
+});
+
+socket.on('chat-history', (messages) => {
+  messageList.innerHTML = '';
+
+  for (const message of messages) {
+    const listItem = document.createElement('li');
+    listItem.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center');
+
+    const messageText = document.createElement('span');
+    messageText.textContent = message.message;
+
+    const badge = document.createElement('span');
+    badge.classList.add('badge', 'bg-secondary', 'badge-pill');
+    badge.textContent = message.username;
+
+    listItem.appendChild(messageText);
+    listItem.appendChild(badge);
+
+    messageList.appendChild(listItem);
+  }
+});
 
   </script>
 </body>
